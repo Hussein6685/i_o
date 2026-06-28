@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2026_06_28_080734) do
+ActiveRecord::Schema[8.0].define(version: 2026_06_28_082846) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -30,6 +30,18 @@ ActiveRecord::Schema[8.0].define(version: 2026_06_28_080734) do
     t.index ["user_id"], name: "index_follows_on_user_id"
   end
 
+  create_table "topics", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.bigint "community_id", null: false
+    t.string "title"
+    t.text "text"
+    t.boolean "is_user_private"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["community_id"], name: "index_topics_on_community_id"
+    t.index ["user_id"], name: "index_topics_on_user_id"
+  end
+
   create_table "users", force: :cascade do |t|
     t.string "email", default: "", null: false
     t.string "encrypted_password", default: "", null: false
@@ -44,4 +56,6 @@ ActiveRecord::Schema[8.0].define(version: 2026_06_28_080734) do
 
   add_foreign_key "follows", "communities"
   add_foreign_key "follows", "users"
+  add_foreign_key "topics", "communities"
+  add_foreign_key "topics", "users"
 end
